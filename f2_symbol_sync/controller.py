@@ -131,6 +131,12 @@ class controller(verilog,thesdk):
         for name in [ 'reset', ]:
             f.set_control_data(time=self.time,name=name,val=0)
 
+    def start_datafeed(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'initdone', ]:
+            f.set_control_data(time=self.time,name=name,val=1)
+        self.step_time()
+
 
 
 

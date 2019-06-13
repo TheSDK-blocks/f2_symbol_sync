@@ -1,0 +1,13 @@
+*work
+__pycache__
+transcript
+*.wlf
+sv/tb_*
+*.txt
+*.swp
+.*~
+*.eps
+*~
+
+
+
