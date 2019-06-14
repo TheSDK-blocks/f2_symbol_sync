@@ -256,12 +256,12 @@ if __name__=="__main__":
     signal_generator.Rs=Rs
     signal_generator.Users=1
     signal_generator.Txantennas=1
-    bbsigdict_ofdm_sinusoid3={ 
-            'mode':'ofdm_sinusoid', 
-            'freqs':[1.0e6 , 3e6, 7e6 ], 
-            'length':2**14, 
-            'BBRs':20e6 
-        };
+    #bbsigdict_ofdm_sinusoid3={ 
+    #        'mode':'ofdm_sinusoid', 
+    #        'freqs':[1.0e6 , 3e6, 7e6 ], 
+    #        'length':2**14, 
+    #        'BBRs':20e6 
+    #    };
 
     bbsigdict_802_11n_random_QAM16_OFDM={ 
             'mode':'ofdm_random_802_11n', 
@@ -281,14 +281,13 @@ if __name__=="__main__":
     controller.start_datafeed()
     duts=[ f2_symbol_sync() for i in range(2)]
     duts[1].model='sv'
-    toplot=[]
     for d in duts:    
         d.Rs=Rs
         d.init()
         d.Hstf=np.conj(signal_generator._PLPCseq_short[0:64])
         d.Hltf=np.conj(signal_generator._PLPCseq_long[0:16])
-        #d.interactive_verilog=True
-        d.interactive_verilog=False
+        d.interactive_verilog=True
+        #d.interactive_verilog=False
         d.io_iqSamples.Data=data
         d.control_write=controller.control_write
         d.run()
