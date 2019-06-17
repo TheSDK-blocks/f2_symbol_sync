@@ -59,7 +59,7 @@ class f2_symbol_sync(verilog,thesdk):
         #matchedlong=(np.sum(np.abs(self.Hstf)**2)/np.sum(np.abs(self.Hltf)**2)\
         #        *np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hltf), mode='full')))**2
         matchedshort=np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hstf), mode='full'))**2
-        matchedlong=(np.sum(np.abs(self.Hstf)**2)/np.sum(np.abs(self.Hltf)**2)\
+        matchedlong=(2**np.ceil(np.log2(np.sum(np.abs(self.Hstf)**2)/np.sum(np.abs(self.Hltf)**2)))\
                 *np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hltf), mode='full')))**2
 
         #filter for energy filtering (average of 6 samples)
@@ -297,6 +297,7 @@ if __name__=="__main__":
         d.run()
 
     print(duts[0].Hltf)
+    #print(duts[0].Hstf)
 
     #Plots start here
     f0=plt.figure(0)
