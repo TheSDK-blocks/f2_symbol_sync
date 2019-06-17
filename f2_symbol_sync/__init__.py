@@ -284,7 +284,7 @@ if __name__=="__main__":
     controller.step_time(step=10*controller.step)
     controller.start_datafeed()
     duts=[ f2_symbol_sync() for i in range(2)]
-    #duts[1].model='sv'
+    duts[1].model='sv'
     for d in duts:    
         d.Rs=Rs
         d.init()
