@@ -55,19 +55,22 @@ class f2_symbol_sync(verilog,thesdk):
         #scale according to l2 norm
 
         #the maximum of this is sum of squares squared
-        matchedshort=np.abs(sig.convolve(self.io_iqSamples.Data, self.Hstf, mode='full'))**2
+        #matchedshort=np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hstf), mode='full'))**2
+        #matchedlong=(np.sum(np.abs(self.Hstf)**2)/np.sum(np.abs(self.Hltf)**2)\
+        #        *np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hltf), mode='full')))**2
+        matchedshort=np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hstf), mode='full'))**2
         matchedlong=(np.sum(np.abs(self.Hstf)**2)/np.sum(np.abs(self.Hltf)**2)\
-                *np.abs(sig.convolve(self.io_iqSamples.Data, self.Hltf, mode='full')))**2
+                *np.abs(sig.convolve(self.io_iqSamples.Data, np.flipud(self.Hltf), mode='full')))**2
 
         #filter for energy filtering (average of 6 samples)
         efil=np.ones((6,1))
-        sshort=sig.convolve(matchedshort,efil,mode='full')
-        slong=sig.convolve(matchedlong,efil,mode='full')
+        sshort=sig.convolve(matchedshort,np.flipud(efil),mode='full')
+        slong=sig.convolve(matchedlong,np.flipud(efil),mode='full')
 
         #sum of the 4 past spikes with separation of 16 samples
         sfil=np.zeros((65,1))
         sfil[16:65:16]=1
-        sspikes_short=sig.convolve(sshort,sfil,mode='full')/np.sum(np.abs(sfil))
+        sspikes_short=sig.convolve(sshort,np.flipud(sfil),mode='full')/np.sum(np.abs(sfil))
         
         #compensate the matched long for the filter delays of the short
         delay=len(sspikes_short)-len(slong)
@@ -275,12 +278,13 @@ if __name__=="__main__":
             signal_generator._Z.Data[0,:,0].imag])
     data=np.round((signal_generator._Z.Data[0,:,0]/scale)\
             .reshape(-1,1)*(2**10-1))
+    data[320::,0]=0
     controller=f2_symbol_sync_controller()
     controller.reset()
     controller.step_time(step=10*controller.step)
     controller.start_datafeed()
     duts=[ f2_symbol_sync() for i in range(2)]
-    duts[1].model='sv'
+    #duts[1].model='sv'
     for d in duts:    
         d.Rs=Rs
         d.init()
