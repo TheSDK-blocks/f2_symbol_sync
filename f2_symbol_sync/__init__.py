@@ -278,7 +278,7 @@ if __name__=="__main__":
             signal_generator._Z.Data[0,:,0].imag])
     data=np.round((signal_generator._Z.Data[0,:,0]/scale)\
             .reshape(-1,1)*(2**10-1))
-    data[320::,0]=0
+    #data[320::,0]=0
     controller=f2_symbol_sync_controller()
     controller.reset()
     controller.step_time(step=10*controller.step)
