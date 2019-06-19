@@ -3,9 +3,8 @@ add wave sim:/tb_f2_symbol_sync/reset
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSamples_real
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSamples_imag
 add wave sim:/tb_f2_symbol_sync/initdone 
-add wave -radix unsigned sim:/tb_f2_symbol_sync/io_shortEnergy
-add wave -radix unsigned sim:/tb_f2_symbol_sync/io_longEnergy
 add wave -radix unsigned sim:/tb_f2_symbol_sync/io_syncMetric 
+add wave sim:/tb_f2_symbol_sync/io_SyncFound
 
 run -all
 
