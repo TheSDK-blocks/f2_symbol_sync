@@ -68,12 +68,14 @@ class f2_symbol_sync(verilog,thesdk):
         slong=sig.convolve(matchedlong,np.flipud(efil),mode='full')
 
         #sum of the 4 past spikes with separation of 16 samples
-        sfil=np.zeros((65,1))
-        sfil[16:65:16]=1
+        sfil=np.zeros((64,1))
+        sfil[16:64:16]=1
         sspikes_short=sig.convolve(sshort,np.flipud(sfil),mode='full')/np.sum(np.abs(sfil))
         
         #compensate the matched long for the filter delays of the short
         delay=len(sspikes_short)-len(slong)
+        print(len(sspikes_short))
+        print(len(slong))
         slong=np.r_['0',slong, np.zeros((delay,1))]
         out=slong+sspikes_short
         self._spikes_long=slong
@@ -278,6 +280,13 @@ if __name__=="__main__":
             signal_generator._Z.Data[0,:,0].imag])
     data=np.round((signal_generator._Z.Data[0,:,0]/scale)\
             .reshape(-1,1)*(2**10-1))
+
+    # Pad the front of the data with n zeros (given in the first
+    # tuple component of the first argument to np.zeros).  This
+    # allows varying the alignment of the sample and the symbol
+    # sync detection window.
+    data=np.r_['0', np.zeros((1,1), dtype='complex'), data]
+
     #data[320::,0]=0
     controller=f2_symbol_sync_controller()
     controller.reset()
