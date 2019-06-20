@@ -4,7 +4,10 @@ add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSamples_real
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSamples_imag
 add wave sim:/tb_f2_symbol_sync/initdone 
 add wave -radix unsigned sim:/tb_f2_symbol_sync/io_syncMetric 
-add wave sim:/tb_f2_symbol_sync/io_SyncFound
+add wave sim:/tb_f2_symbol_sync/io_syncFound 
+add wave sim:/tb_f2_symbol_sync/io_previousIndex
+add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSyncedSamples_real
+add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSyncedSamples_imag
 
 run -all
 
