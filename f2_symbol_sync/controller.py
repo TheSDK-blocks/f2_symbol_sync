@@ -151,6 +151,18 @@ class controller(verilog,thesdk):
             f.set_control_data(time=self.time,name=name,val=0)
         self.step_time()
 
+    def set_passThru(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_passThru', ]:
+            f.set_control_data(time=self.time,name=name,val=1)
+        self.step_time()
+
+    def reset_passThru(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_passThru', ]:
+            f.set_control_data(time=self.time,name=name,val=0)
+        self.step_time()
+
 
 
 
