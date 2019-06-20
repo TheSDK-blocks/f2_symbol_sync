@@ -292,6 +292,10 @@ if __name__=="__main__":
     controller.reset()
     controller.step_time(step=10*controller.step)
     controller.start_datafeed()
+    controller.set_syncSearch()
+    controller.step_time(step=7*controller.step)
+    controller.reset_syncSearch()
+    
     duts=[ f2_symbol_sync() for i in range(2)]
     duts[1].model='sv'
     for d in duts:    

@@ -62,6 +62,8 @@ class controller(verilog,thesdk):
         self.signallist_write=[
             ('reset', 1),
             ('initdone',0),
+            ('io_syncSearch',0),
+            ('io_passThru',0),
         ]
 
         #These are signals not in dut
@@ -135,6 +137,18 @@ class controller(verilog,thesdk):
         f=self.control_write.Data.Members['control_write']
         for name in [ 'initdone', ]:
             f.set_control_data(time=self.time,name=name,val=1)
+        self.step_time()
+
+    def set_syncSearch(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_syncSearch', ]:
+            f.set_control_data(time=self.time,name=name,val=1)
+        self.step_time()
+
+    def reset_syncSearch(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_syncSearch', ]:
+            f.set_control_data(time=self.time,name=name,val=0)
         self.step_time()
 
 
