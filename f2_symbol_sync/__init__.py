@@ -287,6 +287,9 @@ if __name__=="__main__":
     # sync detection window.
     data=np.r_['0', np.zeros((6,1), dtype='complex'), data]
 
+    # Scale the input signal. nb: keep the scale factor <= 40
+    data = 20 * data
+
     #data[320::,0]=0
     controller=f2_symbol_sync_controller()
     controller.reset()

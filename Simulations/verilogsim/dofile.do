@@ -9,6 +9,7 @@ add wave -radix unsigned sim:/tb_f2_symbol_sync/io_syncMetric
 add wave sim:/tb_f2_symbol_sync/io_syncFound 
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSyncedSamples_real
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSyncedSamples_imag
+add wave -radix decimal sim:/tb_f2_symbol_sync/io_shortMod
 
 run -all
 
