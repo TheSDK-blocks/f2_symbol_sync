@@ -14,7 +14,7 @@ class controller(verilog,thesdk):
     def _classfile(self):
         return os.path.dirname(os.path.realpath(__file__)) + "/"+__name__
 
-    def __init__(self,*arg): 
+    def __init__(self,*arg):
         self.proplist = [ 'Rs', 'symbol_length', 'Users' ];    #properties that can be propagated from parent
         self.Rs = 160e6;                   # Sampling frequency
         self.step=int(1/(self.Rs*1e-12))   #Time increment for control
@@ -36,12 +36,12 @@ class controller(verilog,thesdk):
             self.parent =parent;
 
 
-        # We now where the verilog file is. 
+        # We now where the verilog file is.
         # Let's read in the file to have IOs defined
-        self.dut=verilog_module(file=self.entitypath + 
+        self.dut=verilog_module(file=self.entitypath +
                 '/../f2_symbol_sync/sv/f2_symbol_sync.sv')
 
-        # Define the signal connectors associeted with this 
+        # Define the signal connectors associeted with this
         # controller
         # These are signals of tb driving several targets
         # Not present in DUT
@@ -64,6 +64,7 @@ class controller(verilog,thesdk):
             ('initdone',0),
             ('io_syncSearch',0),
             ('io_passThru',0),
+            ('io_syncThreshold',128),
         ]
 
         #These are signals not in dut
@@ -72,8 +73,8 @@ class controller(verilog,thesdk):
         self.signallist_read=[
         ]
         #for user in range(self.Users):
-        #   self.signallist_read+= [ ('io_estimate_out_%s_real' %(user),0)  , 
-        #           ('io_estimate_out_%s_imag' %(user) ,0)] 
+        #   self.signallist_read+= [ ('io_estimate_out_%s_real' %(user),0)  ,
+        #           ('io_estimate_out_%s_imag' %(user) ,0)]
 
         self.init()
 
@@ -89,7 +90,7 @@ class controller(verilog,thesdk):
                     dir='in',iotype='ctrl')
 
         self.define_control()
-    
+
     #Redefines teh control sequence to zero
     def reset_control_sequence(self):
         f=self.control_write.Data.Members['control_write']
@@ -98,7 +99,7 @@ class controller(verilog,thesdk):
         f.set_control_data(init=0) # Initialize to zeros at time 0
 
 
-    # First we start to control Verilog simulations with 
+    # First we start to control Verilog simulations with
     # This controller. I.e we pass the IOfile definition
     def step_time(self,**kwargs):
         self.time+=kwargs.get('step',self.step)
@@ -113,9 +114,9 @@ class controller(verilog,thesdk):
             if name in self.newsigs_write:
                 self.connectors.new(name=name, cls='reg')
             else:
-                self.connectors.Members[name]=self.dut.io_signals.Members[name] 
+                self.connectors.Members[name]=self.dut.io_signals.Members[name]
                 self.connectors.Members[name].init=''
-            scansigs_write.append(name) 
+            scansigs_write.append(name)
 
         f=self.control_write.Data.Members['control_write']
         f.verilog_connectors=self.connectors.list(names=scansigs_write)
@@ -127,7 +128,7 @@ class controller(verilog,thesdk):
         for name in [ 'reset', ]:
             f.set_control_data(time=self.time,name=name,val=1)
 
-        # After awhile, switch off reset 
+        # After awhile, switch off reset
         self.step_time(step=15*self.step)
 
         for name in [ 'reset', ]:
@@ -163,10 +164,8 @@ class controller(verilog,thesdk):
             f.set_control_data(time=self.time,name=name,val=0)
         self.step_time()
 
-
-
-
-
-
-
-
+    def set_syncThreshold(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_syncThreshold', ]:
+            f.set_control_data(time=self.time,name=name,val=128)
+        self.step_time()

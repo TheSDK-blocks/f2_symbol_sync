@@ -1,5 +1,5 @@
-# f2_symbol_sync class 
-# Last modification by initentity generator 
+# f2_symbol_sync class
+# Last modification by initentity generator
 #Simple buffer template
 
 import os
@@ -20,7 +20,7 @@ class f2_symbol_sync(verilog,thesdk):
     def _classfile(self):
         return os.path.dirname(os.path.realpath(__file__)) + "/"+__name__
 
-    def __init__(self,*arg): 
+    def __init__(self,*arg):
         self.proplist = [ 'Rs' ];    # Properties that can be propagated from parent
         self.Rs =  100e6;            # Sampling frequency
         self.io_iqSamples = IO();    # Pointer for input data
@@ -71,7 +71,7 @@ class f2_symbol_sync(verilog,thesdk):
         sfil=np.zeros((64,1))
         sfil[16:64:16]=1
         sspikes_short=sig.convolve(sshort,np.flipud(sfil),mode='full')/np.sum(np.abs(sfil))
-        
+
         #compensate the matched long for the filter delays of the short
         delay=len(sspikes_short)-len(slong)
         print(len(sspikes_short))
@@ -99,7 +99,7 @@ class f2_symbol_sync(verilog,thesdk):
         #    self.print_log({'type':'D', 'msg': "Testwin is %s" %(testwin)})
         #    smax=np.max(testwin)
         #    indmax=i+np.argmax(testwin,axis=0)
-        #    
+        #
         #    if smax != sspikes_sum[indmax]:
         #        self.print_log({'type':'F', 'msg': "Something wrong with the symbol boundary"})
 
@@ -108,11 +108,11 @@ class f2_symbol_sync(verilog,thesdk):
         #        smax=smaxprev
         #        indmax=indmaxprev
         #        self.print_log({'type':'I', 'msg': "Found the symbol boundary at sample %i" %(indmax)})
-        #        
-        #        #this is an estimate of the start of the channel estimation for 
+        #
+        #        #this is an estimate of the start of the channel estimation for
         #        # a user.
         #        ch_index[usercount]=int(indmaxprev)+int(efil.shape[0]/2)
-        #        #this is to prevent accidental sync to long sequence of the current/short sequence of the next user. 
+        #        #this is to prevent accidental sync to long sequence of the current/short sequence of the next user.
         #        smaxprev=0 #reset the spike maximum Value
         #        usercount+=1
         #        #This is suffient jump to avoid incorrect sync
@@ -155,7 +155,7 @@ class f2_symbol_sync(verilog,thesdk):
             self.queue=arg[0]  #multiprocessing.queue as the first argument
         if self.model=='py':
             self.main()
-        else: 
+        else:
           self.write_infile()
 
           if self.model=='sv':
@@ -206,7 +206,7 @@ class f2_symbol_sync(verilog,thesdk):
             self.tb.parameters.Members.update(val.vlogparam)
 
         # Define the iofiles of the testbench. '
-        # Needed for creating file io routines 
+        # Needed for creating file io routines
         self.tb.iofiles=self.iofile_bundle
 
         #Define testbench verilog file
@@ -216,7 +216,7 @@ class f2_symbol_sync(verilog,thesdk):
         for connector in self.control_write.Data.Members['control_write'].verilog_connectors:
             self.tb.connectors.Members[connector.name]=connector
             # Connect them to DUT
-            try: 
+            try:
                 self.dut.ios.Members[connector.name].connect=connector
             except:
                 pass
@@ -261,16 +261,16 @@ if __name__=="__main__":
     signal_generator.Rs=Rs
     signal_generator.Users=1
     signal_generator.Txantennas=1
-    #bbsigdict_ofdm_sinusoid3={ 
-    #        'mode':'ofdm_sinusoid', 
-    #        'freqs':[1.0e6 , 3e6, 7e6 ], 
-    #        'length':2**14, 
-    #        'BBRs':20e6 
+    #bbsigdict_ofdm_sinusoid3={
+    #        'mode':'ofdm_sinusoid',
+    #        'freqs':[1.0e6 , 3e6, 7e6 ],
+    #        'length':2**14,
+    #        'BBRs':20e6
     #    };
 
-    bbsigdict_802_11n_random_QAM16_OFDM={ 
-            'mode':'ofdm_random_802_11n', 
-            'QAM':16, 
+    bbsigdict_802_11n_random_QAM16_OFDM={
+            'mode':'ofdm_random_802_11n',
+            'QAM':16,
             'length':2**10,
             'BBRs': 20e6 };
     signal_generator.bbsigdict=bbsigdict_802_11n_random_QAM16_OFDM
@@ -288,7 +288,7 @@ if __name__=="__main__":
     data=np.r_['0', np.zeros((6,1), dtype='complex'), data]
 
     # Scale the input signal. nb: keep the scale factor <= 40
-    data = 1 * data
+    data = 40 * data
 
     #data[320::,0]=0
     controller=f2_symbol_sync_controller()
@@ -296,6 +296,8 @@ if __name__=="__main__":
     controller.step_time(step=10*controller.step)
     controller.start_datafeed()
     controller.step_time(step=43*controller.step)
+    controller.set_syncThreshold()
+    controller.step_time(step=13*controller.step)
     #controller.set_passThru()
     #controller.step_time(step=5000*controller.step)
     #controller.reset_passThru()
@@ -303,10 +305,10 @@ if __name__=="__main__":
     controller.set_syncSearch()
     controller.step_time(step=7*controller.step)
     controller.reset_syncSearch()
-    
+
     duts=[ f2_symbol_sync() for i in range(2)]
     duts[1].model='sv'
-    for d in duts:    
+    for d in duts:
         d.Rs=Rs
         d.init()
         d.Hstf=np.conj(signal_generator._PLPCseq_short[0:64])
@@ -322,9 +324,9 @@ if __name__=="__main__":
 
     #Plots start here
     f0=plt.figure(0)
-    #x_ref=np.arange(duts[0]._io_syncMetric.Data.shape[0]).reshape(-1,1) 
-    #x_ref=np.arange(2000).reshape(-1,1) 
-    
+    #x_ref=np.arange(duts[0]._io_syncMetric.Data.shape[0]).reshape(-1,1)
+    #x_ref=np.arange(2000).reshape(-1,1)
+
     #plt.plot(x_ref,duts[0]._io_syncMetric.Data[0:200,0])
     plt.plot(duts[0]._io_syncMetric.Data[0:700,0])
     #plt.plot(duts[0].io_iqSamples.Data.real[0:2000,0])
@@ -349,4 +351,3 @@ if __name__=="__main__":
     f1.savefig('verilog_syncMetric.eps', format='eps', dpi=300);
 
     input()
-
