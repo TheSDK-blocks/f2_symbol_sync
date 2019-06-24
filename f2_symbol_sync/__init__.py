@@ -285,7 +285,7 @@ if __name__=="__main__":
     # tuple component of the first argument to np.zeros).  This
     # allows varying the alignment of the sample and the symbol
     # sync detection window.
-    data=np.r_['0', np.zeros((6,1), dtype='complex'), data]
+    data=np.r_['0', np.zeros((15,1), dtype='complex'), data]
 
     # Scale the input signal. nb: keep the scale factor <= 40
     data = 40 * data
