@@ -62,6 +62,7 @@ class controller(verilog,thesdk):
         self.signallist_write=[
             ('reset', 1),
             ('initdone',0),
+            ('io_resetUsers',0),
             ('io_syncSearch',0),
             ('io_passThru',0),
             ('io_syncThreshold',128),
@@ -138,6 +139,18 @@ class controller(verilog,thesdk):
         f=self.control_write.Data.Members['control_write']
         for name in [ 'initdone', ]:
             f.set_control_data(time=self.time,name=name,val=1)
+        self.step_time()
+
+    def set_resetUsers(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_resetUsers', ]:
+            f.set_control_data(time=self.time,name=name,val=1)
+        self.step_time()
+
+    def reset_resetUsers(self):
+        f=self.control_write.Data.Members['control_write']
+        for name in [ 'io_resetUsers', ]:
+            f.set_control_data(time=self.time,name=name,val=0)
         self.step_time()
 
     def set_syncSearch(self):
