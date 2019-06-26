@@ -296,7 +296,7 @@ if __name__=="__main__":
     controller.step_time(step=10*controller.step)
     controller.start_datafeed()
     controller.step_time(step=43*controller.step)
-    controller.set_syncThreshold()
+    controller.set_frameThreshold()
     controller.step_time(step=13*controller.step)
     controller.set_resetUsers()
     controller.step_time(step=7*controller.step)

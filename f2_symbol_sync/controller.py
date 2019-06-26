@@ -65,7 +65,7 @@ class controller(verilog,thesdk):
             ('io_resetUsers',0),
             ('io_syncSearch',0),
             ('io_passThru',0),
-            ('io_syncThreshold',128),
+            ('io_frameThreshold',128),
         ]
 
         #These are signals not in dut
@@ -177,8 +177,8 @@ class controller(verilog,thesdk):
             f.set_control_data(time=self.time,name=name,val=0)
         self.step_time()
 
-    def set_syncThreshold(self):
+    def set_frameThreshold(self):
         f=self.control_write.Data.Members['control_write']
-        for name in [ 'io_syncThreshold', ]:
-            f.set_control_data(time=self.time,name=name,val=128)
+        for name in [ 'io_frameThreshold', ]:
+            f.set_control_data(time=self.time,name=name,val=100)
         self.step_time()
