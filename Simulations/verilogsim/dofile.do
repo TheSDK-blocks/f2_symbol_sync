@@ -7,6 +7,10 @@ add wave sim:/tb_f2_symbol_sync/io_passThru
 add wave -radix unsigned sim:/tb_f2_symbol_sync/io_syncThreshold
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSamples_real
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_iqSamples_imag
+add wave -radix decimal sim:/tb_f2_symbol_sync/io_signalPower
+add wave -radix decimal sim:/tb_f2_symbol_sync/io_crossPower_real
+add wave -radix decimal sim:/tb_f2_symbol_sync/io_crossPower_imag
+add wave -radix unsigned sim:/tb_f2_symbol_sync/io_crossMagnitude
 add wave -radix decimal sim:/tb_f2_symbol_sync/io_syncMetric
 add wave sim:/tb_f2_symbol_sync/io_frameSync
 add wave sim:/tb_f2_symbol_sync/io_symbolSync
